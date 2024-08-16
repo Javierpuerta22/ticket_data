@@ -39,7 +39,6 @@ class CSVconstructor:
                 total = float(total)
                 index = i
                 break
-        print(self.text[7:(index)])
         
         self.text = self.text[7:(index)]
         
@@ -70,14 +69,11 @@ class CSVconstructor:
                     self.df.loc[self.df.shape[0]] =  {"id":id, "fecha":fecha, "hora":hora, "clase":clase, "descripcion":descripcion, "cantidad":cantidad, "importe":importe, "total": total, "peso": 0}
                     
                 elif self.detect_pez(row_separated):
-                    print(row_separated)
                     self.pez_detected = True
                     self.add_pez_rows(id, fecha, hora, total, i)
                     break
                 
                 elif self.detect_fruta(row_separated):
-                    print(row_separated)
-                    print("hola")
                     self.fruta_detected = True
                     self.add_fruta_rows(id, fecha, hora, total, i)
                     break
@@ -128,15 +124,12 @@ class CSVconstructor:
     
     def add_pez_rows(self, id, fecha, hora, total, index):
         restante = self.text[(index +1):]
-        print(restante)
-        print(index)
         index_add = 0
         for desc, pesaje in zip(restante[::2], restante[1::2]):
             desc = re.sub(r'^(\d+)', r'\1 ', desc)
             
             if self.detect_pez(desc):
                 self.pez_detected = True
-                print(index_add, index)
                 self.add_pez_rows(id, fecha, hora, total, index + (index_add*2) + 1)
                 break
             
@@ -145,7 +138,6 @@ class CSVconstructor:
                 self.add_fruta_rows(id, fecha, hora, total, index + (index_add*2) + 1)
                 break
 
-            print(desc, pesaje)
             if "PÀRQUING" in desc.split(" "):
                 self.finalized = True
                 break
@@ -164,12 +156,9 @@ class CSVconstructor:
             
     def add_fruta_rows(self, id, fecha, hora, total, index):
         restante = self.text[index:]
-        print(restante)
-        print(index)
         index_add = 0
         for desc, pesaje in zip(restante[::2], restante[1::2]):
             desc = re.sub(r'^(\d+)', r'\1 ', desc)
-            print(desc, pesaje)
 
             if "PÀRQUING" in desc.split(" "):
                 self.finalized = True
