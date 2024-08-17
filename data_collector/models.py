@@ -64,7 +64,7 @@ class CSVconstructor:
                         cantidad = cantidad.replace('6', '')
                         cantidad = int(cantidad)
 
-                    clase = "Otros"
+                    clase = self.detect_category_in_description(descripcion)
                     
                     self.df.loc[self.df.shape[0]] =  {"id":id, "fecha":fecha, "hora":hora, "clase":clase, "descripcion":descripcion, "cantidad":cantidad, "importe":importe, "total": total, "peso": 0}
                     
@@ -121,6 +121,24 @@ class CSVconstructor:
             return True
         
         return False
+    
+    
+    def detect_category_in_description(self, row:str):
+        CARNE = ["CARN", "POLLASTRE", "POLLO", "GALL", "GALLINA", "SALSITXES" "SALCHICHON", "FUET", "BURG", "PERNIL", "BACÓ" ,"LLOM", "COSTELLES", "PORC", "BOTIFARRA", "JAMÓN", "FILET", "BISTEC"]
+        VERDURA = ["XAMPINYÓ", "ICEBERG", "BROCOLI", "BROCOL", "MONGETES", "COGOMBRE"]
+        
+        row_splitted = row.split(' ')
+        for carne in CARNE:
+            if carne in row_splitted:
+                return "Carne"
+        
+        for verdura in VERDURA:
+            if verdura in row_splitted:
+                return "Verdura"
+        
+        
+        return "Otros"
+        
     
     def add_pez_rows(self, id, fecha, hora, total, index):
         restante = self.text[(index +1):]

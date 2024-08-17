@@ -13,4 +13,4 @@ for root, dirs, files in os.walk('../data/pdf'):
             csvConstructor.add_rows(pdf.get_text())
             
             
-csvConstructor.save_csv('./data.csv')
+csvConstructor.save_csv('./../data/csv/data.csv')

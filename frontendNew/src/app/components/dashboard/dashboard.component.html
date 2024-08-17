@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row justify-content-center align-items-center text-center gx-4 gy-4">
+        <div class="col-12">
+            <p class="h3">Ticketdata</p>
+        </div>
+
+        <div class="col-3" *ngIf="data_gasto_categoria">
+            <app-multi-chart-card [id]="'1'" [data]="data_gasto_categoria" [color_text]="'#000000'" [tipo]="data_gasto_categoria.type" [titulo]="data_gasto_categoria.name"></app-multi-chart-card>
+
+        </div>
+        <div class="col-1">
+
+        </div>
+
+        <div class="col-6" *ngIf="data">
+            <app-multi-chart-card [id]="'2'" [data]="data" [color_text]="'#000000'" [tipo]="data.type" [titulo]="data.name"></app-multi-chart-card>
+        </div>
+
+        <div class="col-10" *ngIf="data_semanal">
+            <app-multi-chart-card [id]="'3'" [data]="data_semanal" [color_text]="'#000000'" [tipo]="data_semanal.type" [titulo]="data_semanal.name"></app-multi-chart-card>
+        </div>
+    </div>
+
+</div>
