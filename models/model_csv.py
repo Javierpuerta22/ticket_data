@@ -125,7 +125,9 @@ class CSVconstructor:
     
     def detect_category_in_description(self, row:str):
         CARNE = ["CARN", "POLLASTRE", "POLLO", "GALL", "GALLINA", "SALSITXES" "SALCHICHON", "FUET", "BURG", "PERNIL", "BACÓ" ,"LLOM", "COSTELLES", "PORC", "BOTIFARRA", "JAMÓN", "FILET", "BISTEC"]
-        VERDURA = ["XAMPINYÓ", "ICEBERG", "BROCOLI", "BROCOL", "MONGETES", "COGOMBRE"]
+        VERDURA = ["XAMPINYÓ", "ICEBERG", "BROCOLI", "BROCOL", "MONGETES", "COGOMBRE", "PEBROT"]
+        PAN = ["PA", "XAPATA"]
+        AGUA = ["AIGUA"]
         
         row_splitted = row.split(' ')
         for carne in CARNE:
@@ -135,6 +137,14 @@ class CSVconstructor:
         for verdura in VERDURA:
             if verdura in row_splitted:
                 return "Verdura"
+            
+        for pan in PAN:
+            if pan in row_splitted:
+                return "Pan"
+            
+        for agua in AGUA:
+            if agua in row_splitted:
+                return "Agua"
         
         
         return "Otros"
