@@ -1,0 +1,32 @@
+<div class="container" style="height: 100vh;">
+    <div class="row justify-content-center align-content-center mt-5">
+        <div class="col-12">
+            <p class="fs-2 fw-semibold">Añadir ticket</p>
+        </div>
+        <div class="col-10 mt-4">
+            <p class="fs-5">Sube los archivos PDF para poder añadir los gastos realizados a la base de datos.</p>
+        </div>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="OnSubmit()">
+        <div class="row justify-content-center align-content-center mt-5">
+            <div class="col-6">
+                <div class="mb-3">
+                    <input type="file" class="form-control" (change)="onFileSelected($event)" accept=".pdf" formControlName="files" multiple >
+                </div>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-success" type="submit">Enviar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12" *ngIf="msg_error">
+            <p class=" text-danger">{{msg_error}}</p>
+        </div>
+        <div class="col-12" *ngIf="msg_success">
+            <p class="text-success">{{msg_success}}</p>
+        </div>
+    </div>
+
+</div>

@@ -15,6 +15,7 @@ export class DashboardComponent {
   data:any
   data_semanal:any
   data_gasto_categoria:any
+  data_semanal_count:any
 
   ngOnInit(): void {
     this.dataService.get_monthly_data().subscribe((data: any) => {
@@ -27,6 +28,10 @@ export class DashboardComponent {
 
     this.dataService.get_gasto_categoria().subscribe((data: any) => {
       this.data_gasto_categoria = data;
+    });
+
+    this.dataService.get_week_data_count().subscribe((data: any) => {
+      this.data_semanal_count = data;
     });
 
 

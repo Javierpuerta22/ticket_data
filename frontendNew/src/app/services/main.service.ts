@@ -21,5 +21,22 @@ export class MainService {
     return this.http.get(route + '/get_tipo');
   }
 
+  get_week_data_count() {
+    return this.http.get(route + '/get_week_count');
+  }
+
+  // --------------- Navigator ----------------
+
+  get_navigator() {
+    return this.http.get("./assets/navigator.json");
+  }
+
+
+  // --------------- Add Ticket ----------------
+
+  add_ticket(data: any) {
+    return this.http.post(route + '/add_ticket', data);
+  }
+
 
 }

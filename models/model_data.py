@@ -23,19 +23,22 @@ class DataManipulator:
 
     def group_by_month(self):
         self.create_month()
-        return self.formating_to_frontend_individual(self.df.groupby(['month']).agg({'importe':'sum', 'cantidad':'sum'}).reset_index().to_dict(orient='records'), is_month=True, tipo='line', name='Importe por mes', variable='month')
+        return self.formating_to_frontend_individual(self.df.groupby(['month']).agg({'importe':'sum', 'cantidad':'sum'}).reset_index().to_dict(orient='records'), is_month=True, tipo='line', name='Gasto mensual', variable='month')
     
     
-    def group_by_weekday(self):
+    def group_by_weekday(self, with_importe:bool = True):
         self.create_month()
-        return self.formating_to_frontend_individual(self.df.groupby(['week']).agg({'importe':'sum', 'cantidad':'sum'}).reset_index().to_dict(orient='records'), tipo='line', name='Importe por día de la semana', variable="week" , is_week=True)
-    
+        if with_importe:
+            return self.formating_to_frontend_individual(self.df.groupby(['week']).agg({'importe':'sum', 'cantidad':'sum'}).reset_index().to_dict(orient='records'), tipo='line', name='Gasto semanal', variable="week" , is_week=True)
+        
+        return self.formating_to_frontend_individual(self.df.groupby(['week']).agg({'id':'nunique'}).reset_index().to_dict(orient='records'), tipo='line', name='Visitas por semana', variable="week" , is_week=True, data_to_see='id')
+        
     
     def group_by_tipo(self):
-        return self.formating_to_frontend_individual(self.df.groupby(['clase']).agg({'importe':'sum', 'cantidad':'sum'}).reset_index().to_dict(orient='records'), tipo='pie', name='Importe por tipo', variable='clase')
+        return self.formating_to_frontend_individual(self.df.groupby(['clase']).agg({'importe':'sum', 'cantidad':'sum'}).reset_index().to_dict(orient='records'), tipo='pie', name='Gasto por tipo de producto', variable='clase')
     
     
-    def formating_to_frontend_individual(self, data:list, variable:str = "" ,tipo:str = "line", name:str = "",  is_month:bool = False, is_week:bool = False):
+    def formating_to_frontend_individual(self, data:list, variable:str = "" ,tipo:str = "line", name:str = "",  is_month:bool = False, is_week:bool = False, data_to_see:str = 'importe'):
         """
         La estructura para el frontend es la siguiente: 
         {
@@ -62,8 +65,8 @@ class DataManipulator:
         labels = [item[variable] for item in data]
         datasets = [
             {
-                'label': 'Importe',
-                'data': [item['importe'] for item in data]
+                'label': data_to_see,
+                'data': [item[data_to_see] for item in data]
             }
         ]
         return {'labels': labels, 'datasets': datasets, 'type': tipo, 'name': name}

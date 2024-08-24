@@ -1,0 +1,14 @@
+{
+    "navigator": [
+        {
+            "name": "Información mensual",
+            "path": "/dashboard",
+            "icon": "home"
+        },
+        {
+            "name": "Añadir gasto",
+            "path": "/add_expense",
+            "icon": "info"
+        }
+    ]
+}

@@ -7,17 +7,24 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MultiChartCardComponent } from './components/multi-chart-card/multi-chart-card.component';
 import { MainService } from './services/main.service';
 import { HttpClientModule } from '@angular/common/http';
+import { NavegatorComponent } from './components/navegator/navegator.component';
+import { AddTicketComponent } from './components/add-ticket/add-ticket.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    MultiChartCardComponent
+    MultiChartCardComponent,
+    NavegatorComponent,
+    AddTicketComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [
     MainService
