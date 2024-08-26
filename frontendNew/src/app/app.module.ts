@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavegatorComponent } from './components/navegator/navegator.component';
 import { AddTicketComponent } from './components/add-ticket/add-ticket.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActualMonthComponent } from './components/actual-month/actual-month.component';
+import { CardInfoComponent } from './components/card-info/card-info.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DashboardComponent,
     MultiChartCardComponent,
     NavegatorComponent,
-    AddTicketComponent
+    AddTicketComponent,
+    ActualMonthComponent,
+    CardInfoComponent
   ],
   imports: [
     BrowserModule,

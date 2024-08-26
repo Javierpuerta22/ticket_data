@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center text-center gx-5 gy-5" *ngIf="data">
+        <div class="col-12">
+            <p class="h3">Gastos del mes</p>
+        </div>
+        <div class="col-4">
+            <app-card-info [title]="'Gasto total'" [value]="data.importe" [label]="'€'"></app-card-info>
+        </div>
+        <div class="col-4">
+            <app-card-info [title]="'Visitas realizadas'" [value]="data.visitas"></app-card-info>
+        </div>
+
+        <div class="col-4">
+            <app-card-info [title]="'Incremento mensual'" [value]="data.diferencia_mes_anterior" [label]="'%'"></app-card-info>
+        </div>
+
+        <div class="col-4">
+            <app-multi-chart-card [id]="'1233'" [data]="data.db_tipo" [color_text]="'#000000'" [tipo]="data.db_tipo.type" [titulo]="data.db_tipo.name"></app-multi-chart-card>
+        </div>
+        <div class="col-8">
+            <app-multi-chart-card [id]="'12333'" [data]="data.db_visitas_dias" [color_text]="'#000000'" [tipo]="data.db_visitas_dias.type" [titulo]="data.db_visitas_dias.name"></app-multi-chart-card>
+        </div>
+    </div>
+
+</div>

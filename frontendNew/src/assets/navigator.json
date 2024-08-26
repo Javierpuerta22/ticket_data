@@ -1,7 +1,12 @@
 {
     "navigator": [
         {
-            "name": "Información mensual",
+            "name": "Mes Actual",
+            "path": "/actual_month",
+            "icon": "info"
+        },
+        {
+            "name": "Historial",
             "path": "/dashboard",
             "icon": "home"
         },

@@ -1,10 +1,17 @@
-<div class="container-fluid position-relative " style="background-color: #2b2b2b">
-    <div class="row justify-content-center align-items-center text-center gx-4 gy-4 mt-0">
-        <div class="col-12 mt-5 position-fixed top-0">
-            <p class="display-6 text-light">Menú</p>
-            <div class="col-12 mt-3 mb-3" *ngFor="let itemmenu of menu">
-                <a class=" nav-link" [routerLink]="itemmenu.path" [routerLinkActive]="['active', 'fw-semibold']">{{itemmenu.name}}</a>
-            </div>
-        </div>
+<!-- Componente de navegación -->
+
+<nav class="navbar navbar-expand-xxl" style="background-color: #eaeaea;">
+    <div class="container-fluid">
+      <a class="navbar-brand" [routerLink]="menu[0].path">MercaData</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav navbar-nav-scroll me-auto mb-2 mb-lg-0">
+            <li class="nav-item" *ngFor="let itemmenu of menu">
+                <a class="nav-link" [routerLink]="itemmenu.path" [routerLinkActive]="['active', 'fw-semibold']">{{itemmenu.name}}</a>
+            </li>
+        </ul>
+      </div>
     </div>
-</div>
+</nav>
