@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="row justify-content-center align-items-center text-center mb-4">
+        <div class="col-12">
+            <h2 class="title">Historial de precios de productos</h2>
+        </div>
+    </div>
+        <form [formGroup]="form">
+            <div class="row justify-content-center align-items-center text-center">
+                <div class="col-5">
+                    <select name="a" id="a" formControlName="type" class="form-select" (change)="onChangeType($event)">
+                        <option value="{{item}}" *ngFor="let item of types">{{item}}</option>
+                    </select>
+                </div>
+                <div class="col-5">
+                    <select name="a" id="a" formControlName="producto" class="form-select" (change)="onChangeProduct($event)">
+                        <option value="{{item}}" *ngFor="let item of products">{{item}}</option>
+                    </select>
+                </div>
+            </div>
+        </form>    
+        
+        <div class="row justify-content-center align-items-center text-center mt-4" *ngIf="data">
+            <div class="col-10">
+                <app-multi-chart-card [id]="'1233'" [data]="data" [color_text]="'#000000'" [tipo]="data.type" [titulo]="data.name"></app-multi-chart-card>
+            </div>
+        </div>
+</div>

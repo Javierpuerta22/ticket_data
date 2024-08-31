@@ -9,6 +9,8 @@ class DataManipulator:
     def __init__(self, path:str):
         self.path = path
         self.df = pd.read_csv(path)
+        self.df["descripcion"] = self.df["descripcion"].str.capitalize()
+        self.df["descripcion"] = self.df["descripcion"].str.strip()
         self.isMonth = False
         
         self._traductor_month = {i :x for i,x in enumerate(calendar.month_name)}
@@ -24,6 +26,9 @@ class DataManipulator:
         self.df['month'] = self.df['fecha'].dt.month
         self.df['year'] = self.df['fecha'].dt.year
         self.df['day'] = self.df['fecha'].dt.day
+        self.df["year_month"] = self.df['year'].astype(str) + "-" + self.df['month'].astype(str)
+        self.df['year_month_day'] = self.df['year'].astype(str) + "-" + self.df['month'].astype(str) + "-" + self.df['day'].astype(str)
+
         #ponemos el numero de la semana
         self.df['week'] = self.df['fecha'].dt.isocalendar().week
         self.df['weekday'] = self.df['fecha'].dt.weekday
@@ -71,12 +76,25 @@ class DataManipulator:
         data['diferencia_mes_anterior'] = round(diferencia_mes_anterior_porcentual, 2)
         
         return data
-        
-        
-        
-        
-        
     
+    
+    def select_prices_timeline_by_product(self, product:str):
+        df_individual = self.df[self.df['descripcion'] == product].sort_values(by='year_month_day')
+        
+        if df_individual["peso"].sum() > 0:
+            df_individual["unitary_price"] = round(df_individual['importe'] / df_individual['peso'], 2)
+        else:
+            df_individual["unitary_price"] = round(df_individual['importe'] / df_individual['cantidad'].replace(0,1), 2) 
+            
+        df_individual = df_individual.to_dict(orient='records')
+        
+        return self.formating_to_frontend_individual(df_individual, tipo='line', name=f'Precio de {product} en el tiempo', variable='year_month_day', data_to_see="unitary_price")
+        
+    def get_types_of_products(self):
+        return self.df['clase'].unique().tolist()
+    
+    def get_subtypes_of_products(self, product:str):
+        return self.df[self.df['clase'] == product]['descripcion'].unique().tolist()
     
     def formating_to_frontend_individual(self, data:list, variable:str = "" ,tipo:str = "line", name:str = "",  is_month:bool = False, is_week:bool = False, data_to_see:str = 'importe', is_weekday:bool = False):
         """
@@ -104,6 +122,8 @@ class DataManipulator:
         elif is_weekday:
             data = sorted(data, key=lambda x: list(self._traductor_day.values()).index(x['weekday']))
         
+        
+        print(data)
         
         labels = [item[variable] for item in data]
         datasets = [

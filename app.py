@@ -5,12 +5,14 @@ from flask_cors import CORS
 from models.model_data import DataManipulator
 from models.model_csv import CSVconstructor, PDFFile
 from routes.monthly import monthly, DataClass
+from routes.prices import prices
 
 
 app = flask.Flask(__name__, template_folder='templates', static_folder='static', static_url_path='')
 CORS(app)
 app.config["DEBUG"] = True
 app.register_blueprint(monthly)
+app.register_blueprint(prices)
 
 
 

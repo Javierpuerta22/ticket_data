@@ -12,6 +12,9 @@ import { AddTicketComponent } from './components/add-ticket/add-ticket.component
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActualMonthComponent } from './components/actual-month/actual-month.component';
 import { CardInfoComponent } from './components/card-info/card-info.component';
+import { PricesTimelineComponent } from './components/prices-timeline/prices-timeline.component';
+import { MonthlyService } from './services/monthly.service';
+import { PricesService } from './services/prices.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,8 @@ import { CardInfoComponent } from './components/card-info/card-info.component';
     NavegatorComponent,
     AddTicketComponent,
     ActualMonthComponent,
-    CardInfoComponent
+    CardInfoComponent,
+    PricesTimelineComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,7 @@ import { CardInfoComponent } from './components/card-info/card-info.component';
     FormsModule
   ],
   providers: [
-    MainService
+    MainService, MonthlyService, PricesService
   ],
   bootstrap: [AppComponent]
 })

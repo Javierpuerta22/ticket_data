@@ -11,6 +11,11 @@
             "icon": "home"
         },
         {
+            "name": "Hisotrial de precios",
+            "path": "/prices_timeline",
+            "icon": "home"
+        },
+        {
             "name": "Añadir gasto",
             "path": "/add_expense",
             "icon": "info"
