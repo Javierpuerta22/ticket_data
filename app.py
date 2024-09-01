@@ -1,22 +1,27 @@
 import flask, pandas as pd
 from flask import request, jsonify
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
-from models.model_data import DataManipulator
-from models.model_csv import CSVconstructor, PDFFile
-from routes.monthly import monthly, DataClass
+from config.config import app, db
+
+from routes.monthly import monthly
 from routes.prices import prices
-
-
-app = flask.Flask(__name__, template_folder='templates', static_folder='static', static_url_path='')
-CORS(app)
-app.config["DEBUG"] = True
 app.register_blueprint(monthly)
 app.register_blueprint(prices)
 
 
+with app.app_context():
+    db.create_all()
 
-CSVConstrucorObject = CSVconstructor()
+
+from models.model_data import DataManipulator
+from models.model_csv import CSVconstructor, PDFFile
+
+
+
+CSVConstrucorObject = CSVconstructor(db)
+DataClass = DataManipulator(db)
 
 @app.route('/get_month', methods=['GET'])
 def get_month():
@@ -28,7 +33,7 @@ def get_weekday():
 
 @app.route('/get_tipo', methods=['GET'])
 def get_tipo():
-    return jsonify(DataClass.group_by_tipo(DataClass.df))
+    return jsonify(DataClass.group_by_tipo(DataClass.select_all_db()))
 
 
 @app.route('/get_week_count', methods=['GET'])
@@ -39,13 +44,6 @@ def get_week_count():
 def upload_files():
     # Obtener la lista de archivos subidos
     uploaded_files = request.files.getlist('files')
-    
-    
-    DataClass.df["fecha"] = DataClass.df["fecha"].dt.strftime('%d/%m/%Y')
-    
-    
-    CSVConstrucorObject.df = DataClass.df[['id', 'fecha', 'hora', 'clase', 'descripcion', 'cantidad', 'importe', 'total', 'peso']]
-    print(CSVConstrucorObject.df.dtypes)
 
     for file in uploaded_files:
         if file and file.filename.endswith('.pdf'):
@@ -53,14 +51,8 @@ def upload_files():
             file.save(f"./data/pdf/{file.filename}")
             pdf = PDFFile(f"./data/pdf/{file.filename}")            
             CSVConstrucorObject.add_rows(pdf.get_text())
-            CSVConstrucorObject.save_csv('./data/csv/data.csv')
-
-    
-    DataClass.df = pd.read_csv('./data/csv/data.csv')
-    DataClass.create_month()            
             
             
-    
     return {"message":"Archivos subidos exitosamente"}
 
 if __name__ == '__main__':

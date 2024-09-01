@@ -2,11 +2,13 @@ from flask import Blueprint, request, jsonify
 from flask_cors import CORS
 
 from models.model_data import DataManipulator
-from models.model_csv import CSVconstructor, PDFFile
-from .monthly import DataClass
+from models.database import db
+
 
 prices = Blueprint('prices', __name__)
 CORS(prices)
+
+DataClass = DataManipulator(db)
 
 
 @prices.route('/prices/data/type', methods=['GET'])

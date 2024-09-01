@@ -1,6 +1,7 @@
 import pandas as pd
-import re
+import re, datetime
 from PyPDF2 import PdfReader
+from .database import Ticket
 
 class PDFFile:
     def __init__(self, path):
@@ -16,9 +17,9 @@ class PDFFile:
 
 
 class CSVconstructor:
-    def __init__(self):
+    def __init__(self, db):
         # construimos un dataframe vacio con las columas que necesitamos
-        self.df = pd.DataFrame(columns=["id", "fecha", "hora", "clase", "descripcion", "cantidad", "importe", "total", "peso"])
+        self.db = db
         self.pez_detected = False
         self.fruta_detected = False
         self.finalized = False
@@ -66,7 +67,9 @@ class CSVconstructor:
 
                     clase = self.detect_category_in_description(descripcion)
                     
-                    self.df.loc[self.df.shape[0]] =  {"id":id, "fecha":fecha, "hora":hora, "clase":clase, "descripcion":descripcion, "cantidad":cantidad, "importe":importe, "total": total, "peso": 0}
+                    # convertimos la fecha y la hora en datetime
+                    
+                    self.db.session.add(Ticket(id=id, fecha=fecha, clase=clase, descripcion=descripcion.strip(), cantidad=int(cantidad), importe=importe, total=total, peso=0))
                     
                 elif self.detect_pez(row_separated):
                     self.pez_detected = True
@@ -80,8 +83,8 @@ class CSVconstructor:
             else:
                 self.finalized = True
                 break
-                
-        return self.df
+            
+        self.db.session.commit()                
         
         
     def detect_cabecera(self, text:list):
@@ -92,7 +95,10 @@ class CSVconstructor:
         
         # cojemos la fecha
         fecha, hora = text[-2].split(' ')[0], text[-2].split(' ')[1]
-        
+        fecha = datetime.datetime.strptime(fecha, '%d/%m/%Y')
+        hora = fecha.strftime('%Y-%m-%d') + ' ' + hora
+        hora = datetime.datetime.strptime(hora, '%Y-%m-%d %H:%M')
+        fecha = hora
         return id, fecha, hora
     
     def detect_fruta(self, row:str):
@@ -178,9 +184,12 @@ class CSVconstructor:
             importe = pesaje.split(' ')[-1]
             importe = importe.replace(',', '.')
             importe = float(importe)
+          
             
-            self.df.loc[self.df.shape[0]] =  {"id":id, "fecha":fecha, "hora":hora, "clase":clase, "descripcion":descripcion, "cantidad":0, "importe":importe, "total": total, "peso": peso}
+            self.db.session.add(Ticket(id=id, fecha=fecha, clase=clase, descripcion=descripcion.strip(), cantidad=0, importe=importe, total=total, peso=peso))
             index_add += 1
+            
+        self.db.session.commit()
             
     def add_fruta_rows(self, id, fecha, hora, total, index):
         restante = self.text[index:]
@@ -208,15 +217,9 @@ class CSVconstructor:
             importe = importe.replace(',', '.')
             importe = float(importe)
             
-            self.df.loc[self.df.shape[0]] =  {"id":id, "fecha":fecha, "hora":hora, "clase":clase, "descripcion":descripcion, "cantidad":0, "importe":importe, "total": total, "peso": peso}
+            
+            self.db.session.add(Ticket(id=id, fecha=fecha, clase=clase, descripcion=descripcion.strip(), cantidad=0, importe=importe, total=total, peso=peso))
+            
             index_add += 1
-        
-        
-    def save_csv(self, path:str):
-        self.df.to_csv(path, index=False)
-        
-    
-        
-    
-    
-        
+            
+        self.db.session.commit()
